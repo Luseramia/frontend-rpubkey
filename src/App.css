@@ -1,0 +1,16 @@
+.button-select-file{
+  background-color: rgb(141, 177, 255);
+  border-color: aliceblue;
+  width: 100px;
+  height: 40px;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  border-radius: 15px;
+  color: white;
+}
+
+input{
+  border-radius: 50px;
+}
