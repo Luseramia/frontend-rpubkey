@@ -9,7 +9,10 @@ spec:
   replicas: 2
   revisionHistoryLimit: 2
   strategy:
-    type: Recreate
+    type: RollingUpdate  # เปลี่ยนจาก Recreate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: frontend-rpubkey
@@ -18,21 +21,23 @@ spec:
       labels:
         app: frontend-rpubkey
       annotations:
-        consul.hashicorp.com/connect-inject: "false" # ปิด Consul injection
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "web-pubkey"
-        vault.hashicorp.com/agent-inject-secret-config: "dev-secrets/data/web-pubkey"
-        vault.hashicorp.com/agent-inject-template-config: |
-          {{- with secret "dev-secrets/data/web-pubkey" -}}
-          API_TOKEN="{{ .Data.data.privatekey }}"
-          {{- end }}
+        consul.hashicorp.com/connect-inject: "false"
     spec:
       serviceAccountName: frontend-rpubkey
       dnsPolicy: ClusterFirst
       containers:
         - name: frontend-rpubkey
-          image: registry.registry.svc.cluster.local:5000/frontend-rpubkey:6
+          image: registry.registry.svc.cluster.local:5000/frontend-rpubkey:latest
           imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 443
+              protocol: TCP
+          volumeMounts:
+            - name: ssl-certs
+              mountPath: /etc/nginx/ssl
+              readOnly: true
           resources:
             requests:
               memory: "128Mi"
@@ -40,4 +45,15 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "200m"
+      volumes:
+        - name: ssl-certs
+          secret:
+            secretName: frontend-rpubkey-secrets
+            items:
+              - key: privatekey
+                path: private.key
+                mode: 0600
+              - key: certificate
+                path: certificate.crt
+                mode: 0644
       restartPolicy: Always
