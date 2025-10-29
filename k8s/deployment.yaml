@@ -9,7 +9,7 @@ spec:
   replicas: 2
   revisionHistoryLimit: 2
   strategy:
-    type: Recreate  # เปลี่ยนจาก Recreate
+    type: RollingUpdate  # เปลี่ยนจาก Recreate
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 0
@@ -27,7 +27,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: frontend-rpubkey
-          image: registry.registry.svc.cluster.local:5000/frontend-rpubkey:29
+          image: registry.registry.svc.cluster.local:5000/frontend-rpubkey:28
           imagePullPolicy: Always
           ports:
             - containerPort: 80
