@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: frontend-rpubkey-config
-  namespace: n8n
+  namespace: web-pubkey
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: nginx
   tls:  
-    # - secretName: n8n-tls
+    - secretName: frontend-rpubkey-ingress-tls
       hosts:
         - tarchunk.win
   rules:
@@ -22,6 +22,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: backend-rpubkey
+                name: frontend-rpubkey
                 port:
                   number: 3000
