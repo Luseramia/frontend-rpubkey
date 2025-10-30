@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: nginx
   tls:
-    - secretName: frontend-rpubkey-ingress-tls
+    - secretName: frontend-rpubkey-secrets
       hosts:
         - tarchunk.win
   rules:
