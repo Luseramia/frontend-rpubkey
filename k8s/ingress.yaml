@@ -6,11 +6,11 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    # cert-manager.io/cluster-issuer: "letsencrypt-dns01"
+    cert-manager.io/cluster-issuer: "letsencrypt-dns01"
 spec:
   ingressClassName: nginx
   tls:
-    - secretName: frontend-rpubkey-secrets
+    - secretName: frontend-rpubkey-ingress-tls
       hosts:
         - tarchunk.win
   rules:
