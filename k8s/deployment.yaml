@@ -27,7 +27,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: frontend-rpubkey
-          image: registry.registry.svc.cluster.local:5000/frontend-rpubkey:54
+          image: registry.registry.svc.cluster.local:5000/frontend-rpubkey:55
           imagePullPolicy: Always
           ports:
             - containerPort: 80
