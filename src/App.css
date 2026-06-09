@@ -1,16 +1,379 @@
-.button-select-file{
-  background-color: rgb(141, 177, 255);
-  border-color: aliceblue;
-  width: 100px;
-  height: 40px;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
+.app-wrapper {
+  position: relative;
   display: flex;
-  border-radius: 15px;
-  color: white;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 40px 20px;
+  z-index: 1;
 }
 
-input{
-  border-radius: 50px;
+/* Sparkle Decoration */
+.sparkle-icon {
+  position: absolute;
+  color: #fff;
+  opacity: 0.7;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.8));
+}
+
+.sparkle-1 {
+  top: 10%;
+  left: 15%;
+  animation: sparkle-blink 4s infinite ease-in-out;
+  font-size: 24px;
+}
+
+.sparkle-2 {
+  bottom: 15%;
+  right: 15%;
+  animation: sparkle-blink 5s infinite ease-in-out;
+  animation-delay: 1.5s;
+  font-size: 30px;
+}
+
+.sparkle-3 {
+  top: 25%;
+  right: 20%;
+  animation: sparkle-blink 3s infinite ease-in-out;
+  animation-delay: 0.5s;
+  font-size: 18px;
+}
+
+.sparkle-4 {
+  bottom: 25%;
+  left: 20%;
+  animation: sparkle-blink 4.5s infinite ease-in-out;
+  animation-delay: 2.2s;
+  font-size: 20px;
+}
+
+@keyframes sparkle-blink {
+  0%, 100% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1) rotate(180deg);
+    opacity: 0.8;
+  }
+}
+
+/* Glass Card */
+.glass-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 28px;
+  padding: 40px 32px;
+  box-shadow: 
+    0 24px 60px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 40px rgba(192, 132, 252, 0.15);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  position: relative;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(192, 132, 252, 0.1) 40%, rgba(244, 114, 182, 0.05) 70%, rgba(255, 255, 255, 0.03));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass-card:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: 
+    0 24px 60px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 50px rgba(192, 132, 252, 0.25);
+}
+
+/* Card Header */
+.card-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 20%, #e2d1f9 60%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* File Dropzone */
+.dropzone-container {
+  margin-bottom: 24px;
+}
+
+.dropzone-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  padding-left: 4px;
+}
+
+.dropzone-area {
+  position: relative;
+  width: 100%;
+  min-height: 140px;
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.dropzone-area:hover {
+  border-color: var(--primary-purple);
+  background: rgba(192, 132, 252, 0.05);
+  box-shadow: 0 0 20px rgba(192, 132, 252, 0.15);
+}
+
+.dropzone-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.5));
+  transition: transform 0.3s ease;
+}
+
+.dropzone-area:hover .dropzone-icon {
+  transform: translateY(-4px) scale(1.1);
+}
+
+.dropzone-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.dropzone-subtext {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Selected File Display */
+.file-selected-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-name-display {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  word-break: break-all;
+  text-align: center;
+  margin-bottom: 8px;
+  background: rgba(192, 132, 252, 0.15);
+  padding: 6px 16px;
+  border-radius: 100px;
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  box-shadow: 0 0 15px rgba(192, 132, 252, 0.1);
+}
+
+.file-change-action {
+  font-size: 12px;
+  color: var(--primary-purple);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Input Styles */
+.input-group {
+  margin-bottom: 28px;
+}
+
+.input-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  padding-left: 4px;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-input {
+  width: 100%;
+  height: 52px;
+  padding: 0 18px;
+  font-size: 16px;
+  font-family: inherit;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.custom-input::placeholder {
+  color: var(--text-muted);
+}
+
+.custom-input:focus {
+  border-color: var(--primary-purple);
+  background: rgba(192, 132, 252, 0.03);
+  box-shadow: 
+    0 0 0 1px var(--primary-purple),
+    0 0 20px rgba(192, 132, 252, 0.25);
+}
+
+/* Premium Button style */
+.btn-primary {
+  position: relative;
+  width: 100%;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #a855f7 0%, #db2777 100%);
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 
+    0 8px 25px rgba(168, 85, 247, 0.35),
+    0 0 15px rgba(219, 39, 119, 0.2);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 30px rgba(168, 85, 247, 0.5),
+    0 0 25px rgba(219, 39, 119, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: 
+    0 4px 15px rgba(168, 85, 247, 0.3);
+}
+
+/* Button Shimmer Sweep Effect */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 25%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: none;
+}
+
+.btn-primary:hover::after {
+  animation: shine-sweep 1s ease-in-out;
+}
+
+@keyframes shine-sweep {
+  0% {
+    left: -50%;
+  }
+  100% {
+    left: 125%;
+  }
+}
+
+/* Secondary Section - Download client */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 32px 0 24px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.divider:not(:empty)::before {
+  margin-right: 12px;
+}
+
+.divider:not(:empty)::after {
+  margin-left: 12px;
+}
+
+.btn-secondary {
+  position: relative;
+  width: 100%;
+  height: 48px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border-color: rgba(192, 132, 252, 0.4);
+  box-shadow: 0 0 15px rgba(192, 132, 252, 0.1);
+}
+
+.btn-secondary:active {
+  transform: scale(0.98);
 }
